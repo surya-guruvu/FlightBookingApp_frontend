@@ -1,0 +1,28 @@
+{
+    "Welcome to Ayrus Flight Booking App": "ఎయ్రస్ ఫ్లైట్ బుకింగ్ యాప్‌కు స్వాగతం",
+    "Origin": "మూలస్థలం",
+    "Destination": "గమ్యస్థలం",
+    "Date": "తేదీ",
+    "Passengers": "ప్రయాణికులు",
+    "search": "శోధించు",
+    "Home": "హోమ్",
+    "About": "గురించి",
+    "Contact": "సంప్రదించండి",
+    "Login": "లాగిన్",
+    "signUp": "సైన్ అప్",
+    "Change password": "పాస్‌వర్డ్ మార్చు",
+    "Upload Files": "ఫైళ్ళు అప్‌లోడ్ చేయి",
+    "MyFiles": "నా ఫైళ్ళు",
+    "Add Flight": "ఫ్లైట్ జోడించు",
+    "Hi I am Ayrus": "హాయ్, నేను ఎయ్రస్",
+    "Email": "ఇమెయిల్",
+    "username": "వాడుకరి పేరు",
+    "password": "పాస్‌వర్డ్",
+    "Old password": "పాత పాస్‌వర్డ్",
+    "new password": "కొత్త పాస్‌వర్డ్",
+    "Re-Enter Password": "పాస్‌వర్డ్ మళ్లీ ఎంచుకోండి",
+    "Seats Available": "కుర్రాళ్ళు అందుబాటులో",
+    "Start searching for flights to your destination":"మీ గమ్యస్థానానికి విమానాల కోసం శోధించడం ప్రారంభించండి!",
+    "This is a Contact Page.":"ఇది ఒక కాంటాక్ట్ పేజీ."
+  }
+  
