@@ -4,6 +4,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 const Contact = () => {
+  //  const nid = jjhd.jdj;
    const {t} = useTranslation();
  return (
     <>

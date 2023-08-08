@@ -18,6 +18,7 @@ import AddFlightForm from './components/AddFlightForm';
 import { FormDataProvider } from './components/FormDataContext';
 import Book from './components/Book';
 import MyBookings from './components/MyBookings';
+import FeedbackForm from './components/FeedbackForm';
 
 const ContentContainer = styled.div`
   /* ... (other styles) */
@@ -45,6 +46,7 @@ class App extends Component{
             <Route path='/add-flight' element={<AddFlightForm/>}/>
             <Route path="/book/:flightId" element={<Book/>} />
             <Route path='/my_bookings' element={<MyBookings/>}/>
+            <Route path="/feedback" element={<FeedbackForm/>} />
             <Route path='*' element={<PageNotFound/>}/> 
              
           </Routes>      

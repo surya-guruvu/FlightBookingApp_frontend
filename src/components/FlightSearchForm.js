@@ -8,8 +8,10 @@ import { useTranslation } from 'react-i18next';
 import { FormContainer,StyledForm,SearchResultsContainer,BookResultsContainer} from './Styles/FlightSearchFormStyle';
 import Book from './Book';
 import { useNavigate } from 'react-router-dom';
+import { isUserAuthenticated } from './authenticate';
+import * as Sentry from '@sentry/react'; // Import Sentry
 
-
+//formData was added to add some context. But didnot finish it.
 const FlightSearchForm = ({ formData, setFormData }) => {
 
     const {t} = useTranslation();
@@ -25,32 +27,6 @@ const FlightSearchForm = ({ formData, setFormData }) => {
     const { register, handleSubmit , formState: { errors },reset} = useForm({resolver: yupResolver(schema)});
 
     const navigate = useNavigate();
-    const isUserAuthenticated = () => {
-      const jwtToken = localStorage.getItem('jwtToken'); // Replace with your token retrieval logic
-      
-      if (jwtToken) {
-        try {
-          // Split the token into its three parts: header, payload, and signature
-          const [headerEncoded, payloadEncoded] = jwtToken.split('.');
-          
-          // Decode the payload to retrieve the expiration claim
-          const payload = JSON.parse(atob(payloadEncoded));
-          console.log(payload);
-          const { exp } = payload;
-          
-          // Check if the token has not expired
-          const currentTime = Math.floor(Date.now() / 1000);
-          if (exp && exp > currentTime) {
-            return true; // Token is valid and not expired
-          }
-        } catch (error) {
-          console.error('Error decoding or validating JWT:', error);
-          // Handle the error appropriately (e.g., log, clear token, etc.)
-        }
-      }
-      
-      return false; // Token is missing, expired, or invalid
-    };
     
     const handleBookButtonClick = (flightId,flightName) => {
       if(isUserAuthenticated()){
@@ -75,33 +51,14 @@ const FlightSearchForm = ({ formData, setFormData }) => {
     const URL = "/flights";
 
 
-    const handleBookFlight = (flightId)=>{
-      const bookURL = "/flights/book";
-
-      axios.post(bookURL,{flightId:flightId})
-      .then((res)=>{
-        setBookResults(res.data);
-        setSearchResults("");
-      })
-      .catch((err)=>{
-        setSearchResults("");
-        setError1(err);
-      });
-    };
-
-
     const handleSearch = (data) => {
-        // e.preventDefault();
-        // token = localStorage.getItem('jwtToken');
-        // var token1 = localStorage.getItem('jwtToken');
-        // console.log(token1);
+
+      try{
+        const transaction = Sentry.startTransaction({ name: 'FightSearchForm' });
         setFormData(data);
         setBookResults('');
         setSearchResults('');
-        setLoading(true);
-        setError(null);
-        setError1(null);
-        setSubmitted("s");
+        setLoading(true);setError(null);setError1(null);setSubmitted("s");
 
         const sanitizedOrigin = DOMPurify.sanitize(data.origin);
         const sanitizedDestination = DOMPurify.sanitize(data.destination);
@@ -126,8 +83,19 @@ const FlightSearchForm = ({ formData, setFormData }) => {
           setSearchResults("");
           setLoading(false);
           setError(err);
+          Sentry.captureException(err);
         });
+        transaction.finish();
         
+      }
+      catch (error) {
+        console.log(error);
+        // Capture the error with Sentry
+        Sentry.captureException(error);
+      }
+
+
+
     };
     function formatDate(isoDate) {
       const dateObj = new Date(isoDate);
