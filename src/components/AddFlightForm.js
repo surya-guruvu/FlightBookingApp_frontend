@@ -3,8 +3,6 @@ import React, { useState } from 'react';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from "react-hook-form";
-// import DOMPurify from 'dompurify';
-// import { parse, isDate, isValid } from 'date-fns'; 
 
 import { FormContainer,StyledForm } from './Styles/FlightSearchFormStyle';
 
@@ -38,32 +36,22 @@ const AddFlightForm = ()=>{
 
     const handleAddFlight = (data)=>{
         setResult("");
-        // console.log("YES");
 
         const myDate = new Date(data.date);
-        
-
-        
+        console.log(myDate.toISOString());
         const startHours = parseInt(data.startTime.split(':')[0], 10); // Extract hours from HH:MM format
         const startMinutes = parseInt(data.startTime.split(':')[1], 10);
-
         let dStart = new Date(myDate);
         let dEnd   = new Date(myDate);
-
-        console.log(data.endTime);
-
         dStart.setHours(dStart.getHours()+startHours);
         dStart.setMinutes(dStart.getMinutes()+startMinutes);
-
         const endHours = parseInt(data.endTime.split(':')[0], 10); // Extract hours from HH:MM format
         const endMinutes = parseInt(data.endTime.split(':')[1], 10);
-
         dEnd.setHours(dEnd.getHours()+endHours);
         dEnd.setMinutes(dEnd.getMinutes()+endMinutes);
 
-        console.log(myDate);
-        console.log(dStart);
-        console.log(dEnd);
+        // console.log(dStart.toISOString());
+
 
         let newFlightData = {
           flightNumber : data.flightNumber,
@@ -79,90 +67,45 @@ const AddFlightForm = ()=>{
         axios.post(URL,newFlightData)
         
         .then((response)=>{
-          console.log("axios");
-            setResult("Flight Added Successfully");
+          setResult("Flight Added Successfully");
         })
         .catch((error)=>{
-          console.log("axios");
-            alert('Failed to add a new flight. Please try again.');
+          alert('Failed to add a new flight. Please try again.');
         });
     };
-
+ 
     return(
         <FormContainer>
         <h2>Add a New Flight</h2>
         <StyledForm onSubmit={handleSubmit(handleAddFlight)}>
+
           <label htmlFor="flightNumber">Flight Number:</label>
-          <input
-            type="text"
-            id="flightNumber"
-            name="flightNumber"
-            {...register('flightNumber')}
-          />
-          <small className="text-danger">
-            {errors.flightNumber?.message}
-          </small>
+          <input type="text" id="flightNumber" name="flightNumber" {...register('flightNumber')}/>
+          <small className="text-danger"> {errors.flightNumber?.message}</small>
+
           <label htmlFor="origin">Origin:</label>
-          <input
-            type="text"
-            id="origin"
-            name="origin"
-            {...register('origin')}
-          />
-          <small className="text-danger">
-            {errors.origin?.message}
-          </small>
+          <input type="text" id="origin" name="origin" {...register('origin')}/>
+          <small className="text-danger">{errors.origin?.message}</small>
+
           <label htmlFor="destination">Destination:</label>
-          <input
-            type="text"
-            id="destination"
-            name="destination"
-            {...register('destination')}
-          />
-          <small className="text-danger">
-            {errors.destination?.message}
-          </small>
+          <input type="text" id="destination" name="destination" {...register('destination')}/>
+          <small className="text-danger">{errors.destination?.message}</small>
+          
           <label htmlFor="date">Date:</label>
-          <input
-            type="date"
-            id="date"
-            name="date"
-            {...register('date')}
-          />
-          <small className="text-danger">
-            {errors.date?.message}
-          </small>
+          <input type="date" id="date" name="date" {...register('date')}/>
+          <small className="text-danger">{errors.date?.message}</small>
+
           <label htmlFor="seatsAvailable">Seats Available:</label>
-          <input
-            type="number"
-            id="seatsAvailable"
-            name="seatsAvailable"
-            {...register("seatsAvailable")}
-          />
-          <small className="text-danger">
-            {errors.seatsAvailable?.message}
-          </small>
+          <input type="number" id="seatsAvailable" name="seatsAvailable" {...register("seatsAvailable")}/>
+          <small className="text-danger">{errors.seatsAvailable?.message}</small>
+          
           <label htmlFor="startTime">Start Time:</label>
-          <input
-            type="time"
-            id="startTime"
-            name="startTime"
-            {...register("startTime")}
-          />
-          <small className="text-danger">
-            {errors.startTime?.message}
-          </small>
+          <input type="time" id="startTime" name="startTime" {...register("startTime")}/>
+          <small className="text-danger">{errors.startTime?.message}</small>
 
           <label htmlFor="endTime">End Time:</label>
-          <input
-            type="time"
-            id="endTime"
-            name="endTime"
-            {...register("endTime")}
-          />
-          <small className="text-danger">
-            {errors.endTime?.message}
-          </small><br/>
+          <input type="time" id="endTime" name="endTime" {...register("endTime")}/>
+          <small className="text-danger">{errors.endTime?.message}</small><br/>
 
           <button type="submit">Add Flight</button>
 

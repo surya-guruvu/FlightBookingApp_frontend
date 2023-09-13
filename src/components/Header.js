@@ -96,7 +96,7 @@ const Header = () => {
       <Nav>
         <StyledNavLink to="/">{t('Home')}</StyledNavLink>
         <StyledNavLink to={`/about/${name}`}>{t('About')}</StyledNavLink>
-        <StyledNavLink to="/contact">{t('Contact')}</StyledNavLink>
+        {/* <StyledNavLink to="/contact">{t('Contact')}</StyledNavLink> */}
         <StyledNavLink to="/login">{t('Login')}</StyledNavLink>
         <StyledNavLink to="/signUp">{t('signUp')}</StyledNavLink>
         {/* <StyledNavLink to="/change-password">{t("Change password")}</StyledNavLink> */}
@@ -104,6 +104,7 @@ const Header = () => {
         <StyledNavLink to="/files">{t('MyFiles')}</StyledNavLink>
         <StyledNavLink to="/add-flight">{t('Add Flight')}</StyledNavLink>
         <StyledNavLink to="/my_bookings">{"My Bookings"}</StyledNavLink>
+        <StyledNavLink to="/remove-flight">{"Cancel Flight"}</StyledNavLink>
         {/* ... other navigation links */}
       </Nav>
     </StyledHeader>

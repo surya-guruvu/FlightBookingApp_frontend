@@ -1,3 +1,164 @@
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
+import { FormContainer,StyledForm } from './Styles/LoginPageStyles';
+import {
+  LoginPageContainer,
+  Title,
+  FormGroup,
+  Input,
+  Button,
+  Message,
+  ErrorMessage,
+} from './Styles/LoginPageStyles'; // Import the remaining styled components from LoginPageStyles.js
+
+const LoginPage = () => {
+  const [errorMessage, setErrorMessage] = useState('');
+  const [results, setResults] = useState('');
+  const [loggedIn,setLoggedIn] = useState(false);
+  
+  useEffect(()=>{
+    var token = localStorage.getItem('jwtToken');
+    if(token){
+      axios.get('users/check_auth',{headers : {Authorization: `Bearer ${token}`}})
+      .then((res)=>{
+        setLoggedIn(true);
+      })
+      .catch((err)=>{
+        localStorage.removeItem('jwtToken');
+        setLoggedIn(false);
+      });
+    }
+    else{
+      setLoggedIn(false);
+    }
+  },[]);
+
+  const schema = yup.object().shape({
+    username: yup.string().required('Username is required'),
+    email: yup.string().email().required('Email is required'),
+    password: yup.string().min(8).max(32).required('Password is required'),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({ resolver: yupResolver(schema) });
+
+  const URL = '/users/login';
+
+  const finishLogin = (data) => {
+    setResults('');
+    let credentials = {
+      email: data.email,
+      username: data.username,
+      password: data.password,
+    };
+
+    axios
+      .post(URL, credentials, {
+        headers: { 'Content-Type': 'application/json' },
+      })
+      .then((response) => {
+        setResults(response.data.status);
+        var token1 = response.data.tok;
+        localStorage.setItem('jwtToken', token1);
+        setLoggedIn(true);
+        setErrorMessage('');
+      })
+      .catch((err) => {
+        setResults('');
+        console.log(err);
+        setErrorMessage('Invalid Email/Username/Password');
+      });
+
+    reset();
+  };
+
+  const handleError = () => {
+    setResults('');
+  };
+
+  const handleLogout = ()=>{
+    localStorage.removeItem('jwtToken');
+    setLoggedIn(false);
+  }
+
+  return (
+    <LoginPageContainer>
+      {loggedIn?
+      (<>
+      <Message>You are logged In</Message>
+      <Button onClick={handleLogout}>Logout</Button>
+      </>)
+      :
+      (<FormContainer>
+        <StyledForm onSubmit={handleSubmit(finishLogin, handleError)}>
+          <Title>Login</Title>
+          <FormGroup>
+            <label htmlFor="email">Email:</label>
+            <Input
+              type="email"
+              id="email"
+              name="email"
+              {...register('email')}
+            />
+            <ErrorMessage>{errors.email?.message}</ErrorMessage>
+          </FormGroup>
+          <FormGroup>
+            <label htmlFor="username">Username:</label>
+            <Input
+              type="text"
+              id="username"
+              name="username"
+              {...register('username')}
+            />
+            <ErrorMessage>{errors.username?.message}</ErrorMessage>
+          </FormGroup>
+          <FormGroup>
+            <label htmlFor="password">Password:</label>
+            <Input
+              type="password"
+              id="password"
+              name="password"
+              {...register('password')}
+            />
+            <ErrorMessage>{errors.password?.message}</ErrorMessage>
+          </FormGroup>
+          <Button type="submit">Login</Button>
+        </StyledForm>
+        <Message>{results}</Message>
+        <ErrorMessage>{errorMessage}</ErrorMessage>
+      </FormContainer>
+      )}
+    </LoginPageContainer>
+  );
+};
+
+export default LoginPage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // // import React, { useState } from 'react';
 // // import './LoginPage.css'; // Import the CSS file for styles
 // // import axios from 'axios';
@@ -110,116 +271,3 @@
 // };
 
 // export default LoginPage;
-
-
-import React, { useState } from 'react';
-import axios from 'axios';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
-import { FormContainer,StyledForm } from './Styles/LoginPageStyles';
-import {
-  LoginPageContainer,
-  Title,
-  FormGroup,
-  Input,
-  Button,
-  Message,
-  ErrorMessage,
-} from './Styles/LoginPageStyles'; // Import the remaining styled components from LoginPageStyles.js
-
-const LoginPage = () => {
-  const [errorMessage, setErrorMessage] = useState('');
-  const [results, setResults] = useState('');
-
-  const schema = yup.object().shape({
-    username: yup.string().required('Username is required'),
-    email: yup.string().email().required('Email is required'),
-    password: yup.string().min(8).max(32).required('Password is required'),
-  });
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm({ resolver: yupResolver(schema) });
-
-  const URL = '/users/login';
-
-  const finishLogin = (data) => {
-    setResults('');
-    let credentials = {
-      email: data.email,
-      username: data.username,
-      password: data.password,
-    };
-
-    axios
-      .post(URL, credentials, {
-        headers: { 'Content-Type': 'application/json' },
-      })
-      .then((response) => {
-        setResults(response.data.status);
-        var token1 = response.data.tok;
-        localStorage.setItem('jwtToken', token1);
-        setErrorMessage('');
-      })
-      .catch((err) => {
-        setResults('');
-        console.log(err);
-        setErrorMessage('Invalid Email/Username/Password');
-      });
-
-    reset();
-  };
-
-  const handleError = () => {
-    setResults('');
-  };
-
-  return (
-    <LoginPageContainer>
-      <FormContainer>
-        <StyledForm onSubmit={handleSubmit(finishLogin, handleError)}>
-          <Title>Login</Title>
-          <FormGroup>
-            <label htmlFor="email">Email:</label>
-            <Input
-              type="email"
-              id="email"
-              name="email"
-              {...register('email')}
-            />
-            <ErrorMessage>{errors.email?.message}</ErrorMessage>
-          </FormGroup>
-          <FormGroup>
-            <label htmlFor="username">Username:</label>
-            <Input
-              type="text"
-              id="username"
-              name="username"
-              {...register('username')}
-            />
-            <ErrorMessage>{errors.username?.message}</ErrorMessage>
-          </FormGroup>
-          <FormGroup>
-            <label htmlFor="password">Password:</label>
-            <Input
-              type="password"
-              id="password"
-              name="password"
-              {...register('password')}
-            />
-            <ErrorMessage>{errors.password?.message}</ErrorMessage>
-          </FormGroup>
-          <Button type="submit">Login</Button>
-        </StyledForm>
-        <Message>{results}</Message>
-        <ErrorMessage>{errorMessage}</ErrorMessage>
-      </FormContainer>
-    </LoginPageContainer>
-  );
-};
-
-export default LoginPage;

@@ -1,4 +1,4 @@
-import React, {useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import axios from 'axios';
 
 import { useForm } from "react-hook-form";
@@ -17,6 +17,30 @@ import {
 const SignupPage = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [results,setResults] = useState('');
+
+  const [loggedIn,setLoggedIn] = useState(false);
+
+  const handleLogout = ()=>{
+    localStorage.removeItem('jwtToken');
+    setLoggedIn(false);
+  }
+  
+  useEffect(()=>{
+    var token = localStorage.getItem('jwtToken');
+    if(token){
+      axios.get('users/check_auth',{headers : {Authorization: `Bearer ${token}`}})
+      .then((res)=>{
+        setLoggedIn(true);
+      })
+      .catch((err)=>{
+        localStorage.removeItem('jwtToken');
+        setLoggedIn(false);
+      });
+    }
+    else{
+      setLoggedIn(false);
+    }
+  },[]);
 
   const { register, handleSubmit , formState: { errors },reset} = useForm();
 
@@ -115,6 +139,11 @@ const SignupPage = () => {
 
 
     <LoginPageContainer>
+      {loggedIn?
+      (<>
+      <Message>You are logged In</Message>
+      <Button onClick={handleLogout}>Logout</Button>
+      </>):
       <FormContainer>
         <StyledForm onSubmit={handleSubmit(finishSignup, handleError)}>
         <Title>Sign Up</Title>
@@ -156,7 +185,7 @@ const SignupPage = () => {
         </StyledForm>
         <Message>{results}</Message>
         <ErrorMessage>{errorMessage}</ErrorMessage>
-      </FormContainer>
+      </FormContainer>}
       </LoginPageContainer>
   );
 };

@@ -19,6 +19,8 @@ import { FormDataProvider } from './components/FormDataContext';
 import Book from './components/Book';
 import MyBookings from './components/MyBookings';
 import FeedbackForm from './components/FeedbackForm';
+import RemoveFlightForm from './components/RemoveFlightForm';
+
 
 const ContentContainer = styled.div`
   /* ... (other styles) */
@@ -47,12 +49,15 @@ class App extends Component{
             <Route path="/book/:flightId" element={<Book/>} />
             <Route path='/my_bookings' element={<MyBookings/>}/>
             <Route path="/feedback" element={<FeedbackForm/>} />
+            <Route path="/remove-flight" element={<RemoveFlightForm/>}/>
             <Route path='*' element={<PageNotFound/>}/> 
+            
              
           </Routes>      
           </ContentContainer>
         </Router>
         </FormDataProvider>
+	
 
       </>
     ) 
