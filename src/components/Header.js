@@ -38,8 +38,8 @@ const StyledNavLink = styled(NavLink)`
   color: white;
   text-decoration: none;
   font-size: 18px;
-  margin: 0 20px;
-  padding: 10px;
+  margin: 0 15px;
+  padding: 8px;
   border-bottom: 2px solid transparent;
   transition: border-bottom-color 0.3s, transform 0.2s;
   font-weight: 600;
@@ -105,6 +105,7 @@ const Header = () => {
         <StyledNavLink to="/add-flight">{t('Add Flight')}</StyledNavLink>
         <StyledNavLink to="/my_bookings">{"My Bookings"}</StyledNavLink>
         <StyledNavLink to="/remove-flight">{"Cancel Flight"}</StyledNavLink>
+        <StyledNavLink to="/my_notifications">{"Notifications"}</StyledNavLink>
         {/* ... other navigation links */}
       </Nav>
     </StyledHeader>

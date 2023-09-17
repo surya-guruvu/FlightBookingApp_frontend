@@ -20,6 +20,7 @@ import Book from './components/Book';
 import MyBookings from './components/MyBookings';
 import FeedbackForm from './components/FeedbackForm';
 import RemoveFlightForm from './components/RemoveFlightForm';
+import NotificationComponent from './components/NotificationComponent';
 
 
 const ContentContainer = styled.div`
@@ -50,6 +51,7 @@ class App extends Component{
             <Route path='/my_bookings' element={<MyBookings/>}/>
             <Route path="/feedback" element={<FeedbackForm/>} />
             <Route path="/remove-flight" element={<RemoveFlightForm/>}/>
+            <Route path='/my_notifications' element={<NotificationComponent/>}/>
             <Route path='*' element={<PageNotFound/>}/> 
             
              
