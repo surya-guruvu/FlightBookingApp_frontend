@@ -23,13 +23,22 @@ import RemoveFlightForm from './components/RemoveFlightForm';
 import NotificationComponent from './components/NotificationComponent';
 
 
+
 const ContentContainer = styled.div`
   /* ... (other styles) */
   margin-top: 80px; /* Adjust the value to match your header's height */
 `;
 
 
+
+
+
+
+
+
+
 class App extends Component{
+
   render(){
     return (
       <>

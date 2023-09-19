@@ -13,6 +13,9 @@ import {
   Message,
   ErrorMessage,
 } from './Styles/LoginPageStyles'; // Import the remaining styled components from LoginPageStyles.js
+import { getSocket, initializeSocket } from '../socket';
+
+// import { socket } from './socket';
 
 const LoginPage = () => {
   const [errorMessage, setErrorMessage] = useState('');
@@ -22,8 +25,10 @@ const LoginPage = () => {
   useEffect(()=>{
     var token = localStorage.getItem('jwtToken');
     if(token){
+      console.log(token);
       axios.get('users/check_auth',{headers : {Authorization: `Bearer ${token}`}})
       .then((res)=>{
+        initializeSocket(token);
         setLoggedIn(true);
       })
       .catch((err)=>{
@@ -69,6 +74,7 @@ const LoginPage = () => {
         localStorage.setItem('jwtToken', token1);
         setLoggedIn(true);
         setErrorMessage('');
+        initializeSocket(token1);
       })
       .catch((err) => {
         setResults('');

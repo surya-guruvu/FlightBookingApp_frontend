@@ -4,6 +4,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import { getSocket } from "../socket";
 
 const RemoveFlightForm = ()=>{
     const schema = yup.object().shape({
@@ -31,6 +32,10 @@ const RemoveFlightForm = ()=>{
         const URL = `/flights?flightNumber=${flightData.flightNumber}&date=${flightData.date}`;
         axios.delete(URL)
         .then((response)=>{
+            const socket = getSocket();
+            socket.emit('notify',{
+                value:1,
+            });
             setResult("Flight Cancelled Successfully");
           })
           .catch((error)=>{

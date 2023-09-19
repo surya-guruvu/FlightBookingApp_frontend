@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -32,9 +32,9 @@ Sentry.init({
 //LanguageDetector automatically detects user preferred language based on browser settings
 i18n.use(LanguageDetector).init({
   resources: {
-    // en: {
-    //   translation: enTranslations
-    // },
+    en: {
+      translation: enTranslations
+    },
     tel: {
       translation: teTranslations
     }

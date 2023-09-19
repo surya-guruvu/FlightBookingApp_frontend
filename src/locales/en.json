@@ -7,12 +7,12 @@
     "search": "Search",
     "Home": "Home",
     "About": "About",
-    "contact": "Contact",
-    "login": "Login",
-    "signup": "Sign Up",
-    "change password": "Change Password",
-    "upload files": "Upload Files",
-    "Myfiles": "My Files",
+    "Contact": "Contact",
+    "Login": "Login",
+    "signUp": "Sign Up",
+    "Change password": "Change Password",
+    "Upload Files": "Upload Files",
+    "MyFiles": "My Files",
     "Add Flight": "Add Flight",
     "Hi I am Ayrus": "Hi, I am Ayrus",
     "Email": "Email",
@@ -21,6 +21,11 @@
     "Old password": "Old Password",
     "new password": "New Password",
     "Re-Enter Password": "Re-Enter Password",
-    "Seats Available": "Seats Available"
+    "Seats Available": "Seats Available",
+    "My Bookings": "My Bookings",
+    "Cancel Flight": "Cancel Flight",
+    "Notifications": "Notifications",
+    "Start searching for flights to your destination": "Start searching for flights to your destination"
+
   }
   

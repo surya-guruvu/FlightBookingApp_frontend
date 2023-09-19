@@ -2,6 +2,7 @@ import React,{useState,useEffect} from 'react';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
+import axios from 'axios';
 // import { useState,useEffect } from 'react';
 
 const StyledHeader = styled.header`
@@ -79,6 +80,8 @@ const Header = () => {
       setIsFixed(window.scrollY > 100); // Adjust the value as needed
     };
   
+
+
     // Attach scroll event listener when the component mounts
     useEffect(() => {
       window.addEventListener('scroll', handleScroll);
@@ -87,6 +90,11 @@ const Header = () => {
         window.removeEventListener('scroll', handleScroll);
       };
     }, []);
+
+    const [loggedIn,setLoggedIn] = useState(false);
+
+    
+    
     
   const name = "Ayrus";
 
@@ -103,9 +111,9 @@ const Header = () => {
         <StyledNavLink to="/file-upload">{t('Upload Files')}</StyledNavLink>
         <StyledNavLink to="/files">{t('MyFiles')}</StyledNavLink>
         <StyledNavLink to="/add-flight">{t('Add Flight')}</StyledNavLink>
-        <StyledNavLink to="/my_bookings">{"My Bookings"}</StyledNavLink>
-        <StyledNavLink to="/remove-flight">{"Cancel Flight"}</StyledNavLink>
-        <StyledNavLink to="/my_notifications">{"Notifications"}</StyledNavLink>
+        <StyledNavLink to="/my_bookings">{t("My Bookings")}</StyledNavLink>
+        <StyledNavLink to="/remove-flight">{t("Cancel Flight")}</StyledNavLink>
+        <StyledNavLink to="/my_notifications">{t("Notifications")}</StyledNavLink>
         {/* ... other navigation links */}
       </Nav>
     </StyledHeader>

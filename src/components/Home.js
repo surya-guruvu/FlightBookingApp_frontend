@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import FlightSearchForm from './FlightSearchForm'; // Update the import path accordingly
 import LanguageSwitcher from './LanguageSwitcher'; // Assuming you have a LanguageSwitcher component
 import { useFormData } from './FormDataContext';
+// import { socket } from './socket';
+import axios from 'axios';
+import { initializeSocket } from '../socket';
 
 
 const HomeContainer = styled.div`
@@ -46,6 +49,32 @@ const Subtitle = styled.p`
 const Home = () => {
   const { t } = useTranslation();
   const { formData, setFormData } = useFormData();
+
+  // const [loggedIn,setLoggedIn] = useState(false);
+  const [loggedIn,setLoggedIn] = useState(false);
+
+  
+  
+  useEffect(()=>{
+    var token = localStorage.getItem('jwtToken');
+    if(token){
+      console.log(token);
+      axios.get('users/check_auth',{headers : {Authorization: `Bearer ${token}`}})
+      .then((res)=>{
+        initializeSocket(token);
+        setLoggedIn(true);
+      })
+      .catch((err)=>{
+        localStorage.removeItem('jwtToken');
+        setLoggedIn(false);
+      });
+    }
+    else{
+      setLoggedIn(false);
+    }
+  },[]);
+
+  
 
   return (
     <HomeContainer>
