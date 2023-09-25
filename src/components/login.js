@@ -41,6 +41,26 @@ const LoginPage = () => {
     }
   },[]);
 
+  useEffect(()=>{
+    if(loggedIn){
+      const token1 = localStorage.getItem('jwtToken');
+      if(token1){
+        axios.get("/notifications", { headers: { Authorization: `Bearer ${token1}` } })
+        .then((response) => {
+          const unreadCount = response.data.filter(notification => !notification.is_read).length;
+          const socket = getSocket();
+          socket.emit("notification_count",{
+            un_read : unreadCount,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      }
+    }
+
+  },[loggedIn]);
+
   const schema = yup.object().shape({
     username: yup.string().required('Username is required'),
     email: yup.string().email().required('Email is required'),
@@ -85,11 +105,17 @@ const LoginPage = () => {
     reset();
   };
 
+
+
   const handleError = () => {
     setResults('');
   };
 
   const handleLogout = ()=>{
+    const socket = getSocket();
+    socket.emit("notification_count",{
+      un_read : -1,
+    });
     localStorage.removeItem('jwtToken');
     setLoggedIn(false);
   }
@@ -137,7 +163,7 @@ const LoginPage = () => {
           </FormGroup>
           <Button type="submit">Login</Button>
         </StyledForm>
-        <Message>{results}</Message>
+        {/* <Message>{results}</Message> */}
         <ErrorMessage>{errorMessage}</ErrorMessage>
       </FormContainer>
       )}

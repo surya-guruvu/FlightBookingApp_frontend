@@ -9,7 +9,7 @@ export function initializeSocket(jwtToken) {
     console.log("Yes");
     socket = io('/', { query: {
       token: jwtToken,
-    }});
+    }}); 
   }
 }
 

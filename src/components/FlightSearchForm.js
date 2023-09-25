@@ -26,7 +26,7 @@ const FlightSearchForm = ({ formData, setFormData }) => {
 
     const [issue,setIssue] = useState(false);
 
-    const { register, handleSubmit , formState: { errors },reset} = useForm({resolver: yupResolver(schema)});
+    const { register, handleSubmit , formState: { errors }} = useForm({resolver: yupResolver(schema)});
 
     const navigate = useNavigate();
 
@@ -104,7 +104,7 @@ const FlightSearchForm = ({ formData, setFormData }) => {
         console.log(error);
         // Capture the error with Sentry
         Sentry.captureException(error);
-      } 
+      }  
     };
 
   return (

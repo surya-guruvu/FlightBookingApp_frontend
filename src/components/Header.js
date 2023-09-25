@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import axios from 'axios';
+import { getSocket, initializeSocket } from '../socket';
 // import { useState,useEffect } from 'react';
 
 const StyledHeader = styled.header`
@@ -70,10 +71,12 @@ const StyledNavLink = styled(NavLink)`
   }
 `;
 
-const Header = () => {
+
+const Header = ({props}) => {
     const {t} = useTranslation();
 
     const [isFixed, setIsFixed] = useState(false);
+    const [un_read, setUnread] = useState(-1);
 
     const handleScroll = () => {
       // Check the scroll position and set the fixed state accordingly
@@ -91,10 +94,40 @@ const Header = () => {
       };
     }, []);
 
-    const [loggedIn,setLoggedIn] = useState(false);
+    useEffect(()=>{
+      console.log("YeahHeader");
+      const token1 = localStorage.getItem('jwtToken');
+      if(token1){
+        axios.get("/notifications", { headers: { Authorization: `Bearer ${token1}` } })
+        .then((response) => {
+          const unreadCount = response.data.filter(notification => !notification.is_read).length;
+          const socket = getSocket();
+          socket.emit("notification_count",{
+            un_read : unreadCount,
+          });
+        })
+        .catch((err) => {
+          setUnread(-1);
+          console.log(err);
+        });
+      }
+    },[]);
 
+    useEffect(()=>{
+      var socket = getSocket(); 
     
-    
+      if(!socket){
+        socket = initializeSocket();
+      }
+
+      if(socket){
+        console.log("Yeah Socket");
+        socket.on("unread_count",(data)=>{ 
+          console.log(data.un_read);
+          setUnread(data.un_read);
+        });
+      }
+    });    
     
   const name = "Ayrus";
 
@@ -113,7 +146,7 @@ const Header = () => {
         <StyledNavLink to="/add-flight">{t('Add Flight')}</StyledNavLink>
         <StyledNavLink to="/my_bookings">{t("My Bookings")}</StyledNavLink>
         <StyledNavLink to="/remove-flight">{t("Cancel Flight")}</StyledNavLink>
-        <StyledNavLink to="/my_notifications">{t("Notifications")}</StyledNavLink>
+        <StyledNavLink to="/my_notifications">{(un_read === -1) ? "Notifications" : "Notifications[" + un_read + "]"}</StyledNavLink>
         {/* ... other navigation links */}
       </Nav>
     </StyledHeader>

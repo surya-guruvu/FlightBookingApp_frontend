@@ -15,6 +15,7 @@ import {
   LoadingText,
   NotLoggedInMessage,
 } from './Styles/NotificationsStyle';
+import { getSocket, initializeSocket } from '../socket';
 
 
 
@@ -35,6 +36,7 @@ function NotificationComponent() {
     if (token) {
       axios.get('users/check_auth', { headers: { Authorization: `Bearer ${token}` } })
         .then((res) => {
+          initializeSocket(token);
           setLoggedIn(true);
         })
         .catch((err) => {
@@ -95,7 +97,13 @@ function NotificationComponent() {
     console.log(notifications); // This will show the updated state
     const unreadCount = notifications.filter(notification => !notification.is_read).length;
     setUnreadCount(unreadCount >= 0 ? unreadCount : 0);
-  }, [notifications]);
+    const socket = getSocket();
+    if(socket){
+    socket.emit("notification_count",{
+      un_read : loggedIn?unreadCount:-1,
+    });}
+  
+  }, [notifications,loggedIn]);
 
   const toggleNotifications = () => {
     setShowNotifications(!showNotifications);

@@ -61,6 +61,7 @@ const Home = () => {
       console.log(token);
       axios.get('users/check_auth',{headers : {Authorization: `Bearer ${token}`}})
       .then((res)=>{
+        console.log("YeahHome\n");
         initializeSocket(token);
         setLoggedIn(true);
       })

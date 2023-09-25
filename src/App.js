@@ -21,6 +21,8 @@ import MyBookings from './components/MyBookings';
 import FeedbackForm from './components/FeedbackForm';
 import RemoveFlightForm from './components/RemoveFlightForm';
 import NotificationComponent from './components/NotificationComponent';
+import axios from 'axios';
+import { getSocket, initializeSocket } from './socket';
 
 
 
@@ -31,7 +33,7 @@ const ContentContainer = styled.div`
 
 
 
-
+ 
 
 
 
@@ -39,10 +41,45 @@ const ContentContainer = styled.div`
 
 class App extends Component{
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      loggedIn: false,
+    };
+  }
+
+  
+
+  componentDidMount() {
+    const token = localStorage.getItem('jwtToken');
+    if (token) {
+      console.log(token);
+      axios
+        .get('users/check_auth', {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => {
+          console.log('YeahHome\n');
+          // You may need to implement the initializeSocket function here
+          
+          initializeSocket(token);
+          this.setState({ loggedIn: true });
+        })
+        .catch((err) => {
+          localStorage.removeItem('jwtToken');
+          this.setState({ loggedIn: false });
+        });
+    } else {
+      this.setState({ loggedIn: false });
+    }
+
+
+  }
+
   render(){
     return (
       <>
-        <FormDataProvider>
+        <FormDataProvider> 
         <Router>
         <Header/>
           <ContentContainer>
